@@ -20,7 +20,6 @@ public class WelcomeScreen extends Activity {
         finishWelcome.setOnClickListener(onClickListener);
     }
 
-
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
