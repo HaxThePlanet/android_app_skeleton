@@ -15,10 +15,21 @@ public class SplashScreen extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-//                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-//                startActivity(i);
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
