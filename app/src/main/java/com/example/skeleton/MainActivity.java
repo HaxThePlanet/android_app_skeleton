@@ -1,17 +1,27 @@
 package com.example.skeleton;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.skeleton.billing.IabHelper;
 import com.example.skeleton.billing.IabResult;
@@ -28,21 +38,120 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static final String itemSku = "product_id_here";
     static final String base64key = "key_here";
 
+    TextView mainText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (isFirstRun()) {
-            showWelcome();
-        } else {
-            showSplash();
-        }
+//        if (isFirstRun()) {
+//            showWelcome();
+//        } else {
+//            showSplash();
+//        }
 
         //showLogin();
 
         initMain();
-        SetupBilling();
+        //SetupBilling();
+
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+
+
+        if (data != null) {
+            sendNotif(data.toString());
+
+            if (data.toString().contains("www.example.com/")) {
+                mainText.setText("Blocked " + data.toString());
+                sendNotif(data.toString());
+            } else {
+//                if (readPrefs() == 0) {
+
+                PackageManager p = getPackageManager();
+                p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+                Intent webIntent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(data.toString()));
+                startActivity(webIntent);
+
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception e) { }
+
+                p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//                }
+//
+//                this.moveTaskToBack(true);
+            }
+        } else {
+            PackageManager p = getPackageManager();
+            p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        }
+
+        //initBrowserListener();
+
+
+
+        Log.i("INFO", "");
+    }
+
+    private void checkPerms() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this, Manifest.permission.READ_PHONE_STATE)) {
+            } else {
+                ActivityCompat.requestPermissions((Activity) this, new String[] {Manifest.permission.RECEIVE_SMS}, 333);
+            }
+        }
+    }
+
+
+//    private void initBrowserListener() {
+//        BroadcastReceiver sdcardEjectReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+//                    Log.i("INFO", "");
+//                }
+//            }
+//        };
+//
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(Intent.ACTION_VIEW);
+//
+//        intentFilter.addCategory("android.intent.category.DEFAULT");
+//        intentFilter.addCategory("android.intent.category.BROWSABLE");
+//
+//        intentFilter.addDataScheme("http");
+//
+//        registerReceiver(sdcardEjectReceiver, intentFilter);
+//    }
+
+
+//    private void writePrefs() {
+//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putInt("url", 1);
+//        editor.commit();
+//    }
+//
+//    private long readPrefs() {
+//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+//        long highScore = sharedPref.getInt("url", 0);
+//
+//        return highScore;
+//    }
+
+    private void sendNotif(String theUrl) {
+        NotificationCompat.Builder  mBuilder = new NotificationCompat.Builder(this);
+
+        mBuilder.setContentTitle("Phishing attempt prevented!");
+        mBuilder.setContentText(theUrl);
+        mBuilder.setTicker("Phishing attempt prevented");
+        mBuilder.setSmallIcon(R.drawable.ic_menu_send);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(2600, mBuilder.build());
+
     }
 
     private void initMain() {
@@ -57,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mainText = (TextView) findViewById(R.id.mainText);
     }
 
     private boolean isFirstRun() {
