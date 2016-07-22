@@ -8,8 +8,33 @@
 
     <application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:supportsRtl="true" android:theme="@style/AppTheme">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
-        <activity android:name=".MainActivity" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
+        <activity android:noHistory="true" android:name=".MainActivity" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
 
+            <!--<intent-filter android:label="abc">-->
+            <!--<action android:name="android.intent.action.VIEW" />-->
+
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--<category android:name="android.intent.category.BROWSABLE" />-->
+
+            <!--<data android:scheme="http" android:host="*" android:pathPrefix="/" />-->
+            <!--<data android:scheme="https" android:host="*" android:pathPrefix="/" />-->
+
+            <!--</intent-filter>-->
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--<receiver android:name="com.example.skeleton.SmsReceiver">-->
+            <!--<intent-filter>-->
+            <!--<action android:name="android.provider.Telephony.SMS_RECEIVED" />-->
+            <!--</intent-filter>-->
+            <!--</receiver>-->
+
+        </activity>
+
+        <activity android:name="com.example.skeleton.FilterActivity" android:noHistory="true" android:theme="@style/Theme.Transparent">
             <intent-filter android:label="abc">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -18,19 +43,7 @@
 
                 <data android:scheme="http" android:host="*" android:pathPrefix="/" />
                 <data android:scheme="https" android:host="*" android:pathPrefix="/" />
-
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <!--<receiver android:name="com.example.skeleton.SmsReceiver">-->
-                <!--<intent-filter>-->
-                    <!--<action android:name="android.provider.Telephony.SMS_RECEIVED" />-->
-                <!--</intent-filter>-->
-            <!--</receiver>-->
 
         </activity>
 

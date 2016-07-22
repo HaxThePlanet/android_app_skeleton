@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -55,46 +56,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initMain();
         //SetupBilling();
 
-        Intent intent = getIntent();
-        Uri data = intent.getData();
-
-
-        if (data != null) {
-            sendNotif(data.toString());
-
-            if (data.toString().contains("www.example.com/")) {
-                mainText.setText("Blocked " + data.toString());
-                sendNotif(data.toString());
-            } else {
-//                if (readPrefs() == 0) {
-
-                PackageManager p = getPackageManager();
-                p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-
-                Intent webIntent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(data.toString()));
-                startActivity(webIntent);
-
-                try {
-                    Thread.sleep(2000);
-                } catch (Exception e) { }
-
-                p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-//                }
+//        Intent intent = getIntent();
+//        Uri data = intent.getData();
 //
-//                this.moveTaskToBack(true);
-            }
-        } else {
-            PackageManager p = getPackageManager();
-            p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-        }
+//        if (data != null) {
+//            //sendNotif(data.toString());
+//            Log.i("CHAD_LOG", data.toString());
+//
+//
+//            if (data.toString().contains("www.example.com/")) {
+//                mainText.setText("Blocked " + data.toString());
+//                sendNotif(data.toString());
+//            } else {
+//                PackageManager p = getPackageManager();
+//                p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//
+//                passToBrowser(data);
+//
+////                try {
+////                    Thread.sleep(500);
+////                } catch (Exception e) { }
+//
+//                p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//
+////              this.moveTaskToBack(true);
+//            }
+//        } else {
+//            PackageManager p = getPackageManager();
+//            p.setComponentEnabledSetting(getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//        }
 
-        //initBrowserListener();
-
-
-
-        Log.i("INFO", "");
+        //Log.i("INFO", "");
     }
 
+    private void passToBrowser(Uri uri) {
+        Intent mBrowserIntent = new Intent(Intent.ACTION_VIEW);
+        mBrowserIntent.setPackage("com.android.chrome");
+        mBrowserIntent.setFlags(Intent.FLAG_FROM_BACKGROUND | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+        mBrowserIntent.putExtra(Browser.EXTRA_APPLICATION_ID , "com.android.browser");
+        mBrowserIntent.setData(uri);
+        startActivity(mBrowserIntent);
+    }
     private void checkPerms() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this, Manifest.permission.READ_PHONE_STATE)) {
@@ -103,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
-
 
 //    private void initBrowserListener() {
 //        BroadcastReceiver sdcardEjectReceiver = new BroadcastReceiver() {
