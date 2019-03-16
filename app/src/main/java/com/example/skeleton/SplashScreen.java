@@ -24,10 +24,12 @@ public class SplashScreen extends Activity {
     protected void onPause() {
         super.onPause();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     protected void onResume() {
         super.onResume();

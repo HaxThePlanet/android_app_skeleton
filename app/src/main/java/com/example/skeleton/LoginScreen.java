@@ -52,7 +52,7 @@ public class LoginScreen extends Activity {
         printHashKey();
     }
 
-    public void printHashKey(){
+    public void printHashKey() {
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.example.skeleton", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -92,14 +92,17 @@ public class LoginScreen extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     protected void onResume() {
         super.onResume();

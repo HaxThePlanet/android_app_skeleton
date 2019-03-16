@@ -23,7 +23,7 @@ public class WelcomeScreen extends Activity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-            switch(v.getId()){
+            switch (v.getId()) {
                 case R.id.finishWelcome:
                     setNotFirstRun();
                     finish();
@@ -48,10 +48,12 @@ public class WelcomeScreen extends Activity {
     protected void onPause() {
         super.onPause();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
